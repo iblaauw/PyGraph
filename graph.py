@@ -22,8 +22,12 @@ class Graph(object):
         self.data = [ None for i in range(self.N) ]
 
     def GetNode(self, nodeIndex):
+        if nodeIndex is None:
+            raise TypeError("node index cannot be None")
+        if not isinstance(nodeIndex, int):
+            raise TypeError("node index is the wrong type")
         if nodeIndex >= self.N or nodeIndex < 0:
-            raise IndexError()
+            raise KeyError()
         return _Node(self, nodeIndex)
 
     def AddNode(self):
