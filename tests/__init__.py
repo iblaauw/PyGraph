@@ -1,1 +1,1 @@
-from test_base import test, prefix, run
+from run import runAll
