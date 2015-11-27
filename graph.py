@@ -30,6 +30,7 @@ class Graph(object):
     def AddNode(self):
         newId = self.storage.AddNode()
         self._ResizeData(self.N + 1)
+        self.N += 1
         return self.GetNode(newId)
 
     def Resize(self, N):
