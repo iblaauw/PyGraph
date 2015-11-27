@@ -135,6 +135,16 @@ class _StorageTestBase(TestCase):
         self.assertIsNotNone(z)
         self.assertEqual(z, [])
 
+    def test_remove_children(self):
+        self.storage.RemoveNode(1)
+        x = list(self.storage.GetChildren(0))
+        self.assertEqual(x, [])
+
+    def test_remove_parents(self):
+        self.storage.RemoveNode(0)
+        x = list(self.storage.GetParents(1))
+        self.assertEqual(x, [])
+
 
 
 class MatrixTest(_StorageTestBase):

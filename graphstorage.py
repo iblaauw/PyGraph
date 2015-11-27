@@ -155,7 +155,8 @@ class ListStorage(object):
 
     def GetParents(self, nodeId):
         self._EnsureNodeId(nodeId)
-        return (index for index, x in enumerate(self.data) if nodeId in x)
+        return (index for index, x in enumerate(self.data) if nodeId in x 
+            and index not in self._unset)
 
     def __len__(self):
         return len(self.data) - len(self._unset)
