@@ -74,6 +74,7 @@ class _StorageTestBase(TestCase):
         self.assert_access_fail(13,-2)
         self.assert_access_fail(3,7)
 
+    @unittest.skip("Undecided whether reflexive should fail or not")
     def test_get_reflexive(self):
         self.assert_access_fail(0,0)
         self.assert_access_fail(1,1)
@@ -107,6 +108,33 @@ class _StorageTestBase(TestCase):
         self.assert_access_fail(3, nid)
         self.assert_access_fail(nid, 2)
         self.assert_access_eq(3,2,1)
+
+    def test_children(self):
+        x = list(self.storage.GetChildren(0))
+        self.assertIsNotNone(x)
+        self.assertEqual(x, [ 1 ])
+
+        y = list(self.storage.GetChildren(1))
+        self.assertIsNotNone(y)
+        self.assertEqual(y, [])
+
+        z = list(self.storage.GetChildren(3))
+        self.assertIsNotNone(z)
+        self.assertEqual(z, [])
+
+    def test_parents(self):
+        x = list(self.storage.GetParents(1))
+        self.assertIsNotNone(x)
+        self.assertEqual(x, [ 0 ])
+
+        y = list(self.storage.GetParents(0))
+        self.assertIsNotNone(y)
+        self.assertEqual(y, [])
+
+        z = list(self.storage.GetParents(3))
+        self.assertIsNotNone(z)
+        self.assertEqual(z, [])
+
 
 
 class MatrixTest(_StorageTestBase):

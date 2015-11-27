@@ -15,9 +15,6 @@ class Graph(object):
         self.N = numnodes
         self.directed = directed
 
-        # A = adjacency matrix, n x n
-        #   A[i,j] > 0 if node i connects to node j through an edge
-        #   A[i,j] = weight of edge
         self.storage = storage(self.N, self.directed)
         self.data = [ None for i in range(self.N) ]
 
@@ -82,12 +79,21 @@ class _Node(object):
     def Connect(self, index, weight):
         return self.graph.Connect(self.nid, index, weight)
 
-    def NeighborNodes(self):
-        ids = _Node._NeighborsCore(self.graph, self.nid)
+    def Children(self):
+        ids = self.graph.storage.GetChildren(self.nid)
         return [ self.graph[nid] for nid in ids ]
 
-    def NeighborIds(self):
-        return list(_Node._NeighborsCore(self.graph, self.nid))
+    def ChildIds(self):
+        ids = self.graph.storage.GetChildren(self.nid)
+        return list(ids)
+
+    def Parents(self):
+        ids = self.graph.storage.GetParents(self.nid)
+        return [ self.graph[nid] for nid in ids ]
+
+    def ParentIds(self):
+        ids = self.graph.storage.GetParents(self.nid)
+        return list(ids)
 
     def Weight(self, nodeId):
         return self.graph.Weight(self.nid, nodeId)
@@ -97,10 +103,6 @@ class _Node(object):
 
     def Set(self, val):
         return self.graph.SetData(self.nid, val)
-
-    @staticmethod
-    def _NeighborsCore(graph, nid):
-        return graph.storage.GetNeighbors(nid)
 
     def __getitem__(self, nid):
         return self.Weight(nid)

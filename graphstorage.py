@@ -46,9 +46,13 @@ class MatrixStorage(object):
         else:
             self._AdjustDown()
 
-    def GetNeighbors(self, nodeId):
-        _EnsureNodeId(self,nodeId)
-        return (x for x in self.matr[nodeId,:] if x != 0)
+    def GetChildren(self, nodeId):
+        self._EnsureNodeId(nodeId)
+        return (index for index, x in enumerate(self.matr[nodeId,:]) if x != 0)
+
+    def GetParents(self, nodeId):
+        self._EnsureNodeId(nodeId)
+        return (index for index, x in enumerate(self.matr[:, nodeId]) if x != 0)
 
     def __len__(self):
         return self.N - len(self._unset)
@@ -84,6 +88,7 @@ class MatrixStorage(object):
         self.matr[:,nid] = 0
 
  
+
 
 
 class ListStorage(object):
@@ -144,9 +149,13 @@ class ListStorage(object):
         else:
             self._AdjustUp(newN)
 
-    def GetNeighbors(self, nodeId):
-        _EnsureNodeId(self,nodeId)
-        return (x for x,_ in self.data[nodeId])
+    def GetChildren(self, nodeId):
+        self._EnsureNodeId(nodeId)
+        return (x for x in self.data[nodeId])
+
+    def GetParents(self, nodeId):
+        self._EnsureNodeId(nodeId)
+        return (index for index, x in enumerate(self.data) if nodeId in x)
 
     def __len__(self):
         return len(self.data) - len(self._unset)
