@@ -78,7 +78,7 @@ class Graph(GraphInterface):
 
     def GetWeight(self, node1, node2):
         nid1 = Graph._NodeId(node1)
-        nid2 = Graph._NodeId(node1)
+        nid2 = Graph._NodeId(node2)
         self._IdGuard(nid1)
         self._IdGuard(nid2)
 
@@ -86,7 +86,7 @@ class Graph(GraphInterface):
 
     def SetWeight(self, node1, node2, val):
         nid1 = Graph._NodeId(node1)
-        nid2 = Graph._NodeId(node1)
+        nid2 = Graph._NodeId(node2)
         self._IdGuard(nid1)
         self._IdGuard(nid2)
 
