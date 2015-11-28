@@ -14,7 +14,7 @@ class StorageBase(object):
     def Get(self, n1, n2): raise NotImplementedError
 
     @abstractmethod
-    def Set(self, n1, n2): raise NotImplementedError
+    def Set(self, n1, n2, val): raise NotImplementedError
 
     @abstractmethod
     def AddNode(self): raise NotImplementedError
@@ -49,7 +49,7 @@ class StorageBase(object):
 
     def _IdGuard(self, *args):
         for arg in args:
-            _IdGuardSingle(arg)
+            self._IdGuardSingle(arg)
 
     def _IdGuardSingle(self, nid):
         if not isinstance(nid, int):
@@ -67,7 +67,7 @@ class StorageBase(object):
             return indices
 
         if isinstance(indices, slice):
-            return (indices.start, indices.finish)
+            return (indices.start, indices.stop)
 
         raise TypeError("Invalid indexing type given: %s" % type(nid))
 
@@ -123,7 +123,7 @@ class MatrixStorage(StorageBase):
 
 class ListStorage(StorageBase):
     def __init__(self, N):
-        super(MatrixStorage, self).__init__(N)
+        super(ListStorage, self).__init__(N)
         self.data = [ {} for i in range(N) ]
 
     def Get(self, n1, n2):
@@ -142,8 +142,8 @@ class ListStorage(StorageBase):
         assert(len(self.data) == self.N)
 
     def Remove(self):
-        self._Cleanse(nid)
         self.N -= 1
+        self._Cleanse(self.N)
         self.data.pop()
         assert(len(self.data) == self.N)
 

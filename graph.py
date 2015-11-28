@@ -40,8 +40,8 @@ class Graph(GraphInterface):
     def __init__(self, numnodes, directed=False, 
             storage=MatrixStorage):
         self.directed = directed
-        self.storage = storage(self.N)
-        self.data = [ None for i in range(self.N) ]
+        self.storage = storage(numnodes)
+        self.data = [ None for i in range(numnodes) ]
         self._unset = set()
 
     ###### Interface Methods #####
@@ -59,13 +59,14 @@ class Graph(GraphInterface):
             nid = self._unset.pop()
             self.storage.Zero(nid)
         else:
-            nid = self.storage.AddNode()
+            nid = len(self.data)
+            self.storage.AddNode()
             self.data.append(None)
 
         return self.GetNode(nid)
 
     def RemoveNode(self, node):
-        nid = self._NodeId(node)
+        nid = Graph._NodeId(node)
         self._IdGuard(nid)
 
         if nid == len(self.data) - 1:
@@ -76,28 +77,28 @@ class Graph(GraphInterface):
             self._unset.add(nid)
 
     def GetWeight(self, node1, node2):
-        nid1 = self._NodeId(node1)
-        nid2 = self._NodeId(node1)
+        nid1 = Graph._NodeId(node1)
+        nid2 = Graph._NodeId(node1)
         self._IdGuard(nid1)
         self._IdGuard(nid2)
 
         return self.storage.Get(nid1, nid2)
 
     def SetWeight(self, node1, node2, val):
-        nid1 = self._NodeId(node1)
-        nid2 = self._NodeId(node1)
+        nid1 = Graph._NodeId(node1)
+        nid2 = Graph._NodeId(node1)
         self._IdGuard(nid1)
         self._IdGuard(nid2)
 
-        return self.storage.Set(nid1, nid2, val)
+        self.storage.Set(nid1, nid2, val)
 
     def GetData(self, node):
-        nid = self._NodeId(node)
+        nid = Graph._NodeId(node)
         self._IdGuard(nid)
         return self.data[nid]
 
     def SetData(self, node, val):
-        nid = self._NodeId(node)
+        nid = Graph._NodeId(node)
         self._IdGuard(nid)
         self.data[nid] = val
 
@@ -109,6 +110,7 @@ class Graph(GraphInterface):
 
     ###### Custom Methods #####
 
+    @staticmethod
     def _NodeId(node):
         if node is None:
             raise TypeError("Node cannot be None")
@@ -118,7 +120,7 @@ class Graph(GraphInterface):
             return int(node)
         return node
 
-    def _IdGuard(nid):
+    def _IdGuard(self, nid):
         if nid not in self.storage or nid in self._unset:
             raise KeyError("Invalid node id: %s" % nid)
 
@@ -209,7 +211,7 @@ class _Node(object):
         return self.graph.SetWeight(self.nid, node, weight)
 
     def Weight(self, node):
-        return self.graph.GetWeight(self.nid, nodeId)
+        return self.graph.GetWeight(self.nid, node)
 
     def Children(self):
         ids = self.graph.storage.GetChildren(self.nid)

@@ -6,14 +6,14 @@ from ..graphstorage import MatrixStorage, ListStorage
 class _GraphTestBase(TestCase):
     def setUp(self):
         self.graph = self.create(5)
-        self.graph.Connect(1,2,5)
+        self.graph.SetWeight(1,2,5)
         self.graph.SetData(3, 6)
 
     ###### Custom Assert Funcs ######
 
     def assert_access_eq(self, i, j, val):
         g = self.graph
-        self.assertEqual(g.Weight(i,j), val)
+        self.assertEqual(g.GetWeight(i,j), val)
         self.assertEqual(g[i].Weight(j), val)
         self.assertEqual(g[i][j], val)
 
@@ -25,7 +25,7 @@ class _GraphTestBase(TestCase):
     def assert_access_fail(self, i, j):
         g = self.graph
         with self.assertRaises(KeyError):
-            _ = g.Weight(i,j)
+            _ = g.GetWeight(i,j)
         with self.assertRaises(KeyError):
             _ = g[i][j]
         with self.assertRaises(KeyError):
