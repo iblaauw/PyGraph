@@ -116,6 +116,115 @@ class _GraphTestBase(TestCase):
 
         self.assert_access_eq(nid, 4, -1)
 
+    def test_remove_node(self):
+        g = self.graph
+        g.SetWeight(1,2,4)
+        g.SetWeight(2,3,3)
+
+        g.RemoveNode(1)
+
+        self.assert_access_fail(0,1)
+        self.assert_access_fail(1,2)
+        self.assert_access_fail(1,4)
+
+        with self.assertRaises(KeyError):
+            g.SetWeight(1,3, 4)
+
+        self.assert_access_eq(2,3,3)
+
+    def test_add_remove(self):
+        g = self.graph
+        node = g.AddNode()
+
+        g.SetWeight(node, 3, 4)
+        g.SetWeight(4, node, 3)
+        g.SetWeight(1,3,2)
+
+        g.RemoveNode(node)
+
+        self.assert_access_fail(node.nid, 3)
+        self.assert_access_fail(node.nid, 4)
+        self.assert_access_fail(4, node.nid)
+        self.assert_access_fail(1, node.nid)
+        self.assert_access_eq(1,3,2)
+
+    def test_invalid_node(self):
+        g = self.graph
+        node = g[1]
+        g.RemoveNode(1)
+
+        with self.assertRaises(KeyError):
+            node.Connect(3, 4)
+        with self.assertRaises(KeyError):
+            _ = node.Weight(3)
+        with self.assertRaises(KeyError):
+            _ = node.Children()
+        with self.assertRaises(KeyError):
+            _ = node.ChildIds()
+        with self.assertRaises(KeyError):
+            _ = node.Parents()
+        with self.assertRaises(KeyError):
+            _ = node.ParentIds()
+        with self.assertRaises(KeyError):
+            _ = node.Get()
+        with self.assertRaises(KeyError):
+            node.Set(5)
+        with self.assertRaises(KeyError):
+            _ = node[4]
+
+    def test_children(self):
+        g = self.graph
+        self.assertIsInstance(g[1].Children(), list)
+
+        x = [ n.nid for n in g[1].Children() ]
+        y = [ n.nid for n in g[2].Children() ]
+        z = [ n.nid for n in g[3].Children() ]
+
+        self.assertEqual(x, [ 2 ])
+        self.assertEqual(y, [])
+        self.assertEqual(z, [])
+
+    def test_childids(self):
+        g = self.graph
+        self.assertIsInstance(g[1].ChildIds(), list)
+
+        x = g[1].ChildIds()
+        y = g[2].ChildIds()
+        z = g[3].ChildIds()
+
+        self.assertEqual(x, [ 2 ])
+        self.assertEqual(y, [])
+        self.assertEqual(z, [])
+
+    def test_parents(self):
+        g = self.graph
+
+        self.assertIsInstance(g[2].Parents(), list)
+        self.assertIsInstance(g[2].ParentIds(), list)
+
+        x = [ n.nid for n in g[2].Parents() ]
+        y = [ n.nid for n in g[1].Parents() ]
+        z = [ n.nid for n in g[3].Parents() ]
+
+        self.assertEqual(x, [ 1 ])
+        self.assertEqual(y, [])
+        self.assertEqual(z, [])
+
+    def test_parentids(self):
+        g = self.graph
+        self.assertIsInstance(g[2].ParentIds(), list)
+
+        x = g[2].ParentIds()
+        y = g[1].ParentIds()
+        z = g[3].ParentIds()
+
+        self.assertEqual(x, [ 1 ])
+        self.assertEqual(y, [])
+        self.assertEqual(z, [])
+
+    def test_use_node_for_ops(self):
+        pass
+
 
 class MatrGraphTest(_GraphTestBase):
     def create(self, size):

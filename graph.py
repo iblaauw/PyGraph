@@ -141,19 +141,19 @@ class _Node(object):
         return self.graph.GetWeight(self.nid, node)
 
     def Children(self):
-        ids = self.graph.storage.GetChildren(self.nid)
+        ids = self.graph.storage.Children(self.nid)
         return [ self.graph[nid] for nid in ids ]
 
     def ChildIds(self):
-        ids = self.graph.storage.GetChildren(self.nid)
+        ids = self.graph.storage.Children(self.nid)
         return list(ids)
 
     def Parents(self):
-        ids = self.graph.storage.GetParents(self.nid)
+        ids = self.graph.storage.Parents(self.nid)
         return [ self.graph[nid] for nid in ids ]
 
     def ParentIds(self):
-        ids = self.graph.storage.GetParents(self.nid)
+        ids = self.graph.storage.Parents(self.nid)
         return list(ids)
 
     def Get(self):
@@ -165,42 +165,4 @@ class _Node(object):
     def __getitem__(self, nid):
         return self.Weight(nid)
 
-
-
-
-class _Node2(object):
-    def __init__(self, graph, nid):
-        self.graph = graph
-        self.nid = nid
-
-    def Connect(self, index, weight):
-        return self.graph.Connect(self.nid, index, weight)
-
-    def Children(self):
-        ids = self.graph.storage.GetChildren(self.nid)
-        return [ self.graph[nid] for nid in ids ]
-
-    def ChildIds(self):
-        ids = self.graph.storage.GetChildren(self.nid)
-        return list(ids)
-
-    def Parents(self):
-        ids = self.graph.storage.GetParents(self.nid)
-        return [ self.graph[nid] for nid in ids ]
-
-    def ParentIds(self):
-        ids = self.graph.storage.GetParents(self.nid)
-        return list(ids)
-
-    def Weight(self, nodeId):
-        return self.graph.Weight(self.nid, nodeId)
-
-    def Get(self):
-        return self.graph.GetData(self.nid)
-
-    def Set(self, val):
-        return self.graph.SetData(self.nid, val)
-
-    def __getitem__(self, nid):
-        return self.Weight(nid)
 
