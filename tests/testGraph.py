@@ -223,7 +223,20 @@ class _GraphTestBase(TestCase):
         self.assertEqual(z, [])
 
     def test_use_node_for_ops(self):
-        pass
+        g = self.graph
+        node1 = g[1]
+        node2 = g[2]
+
+        with self.assertRaises(TypeError):
+            node2 = g[node1]
+
+        x = g.GetWeight(node1, node2)
+        self.assertEqual(x, 5)
+
+        g.SetWeight(node1, node2, 7)
+        self.assert_access_eq(1,2,7)
+
+        g.RemoveNode(node1)
 
 
 class MatrGraphTest(_GraphTestBase):
