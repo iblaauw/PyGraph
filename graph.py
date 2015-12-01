@@ -141,18 +141,22 @@ class _Node(object):
         return self.graph.GetWeight(self.nid, node)
 
     def Children(self):
+        self.graph._IdGuard(self.nid)
         ids = self.graph.storage.Children(self.nid)
         return [ self.graph[nid] for nid in ids ]
 
     def ChildIds(self):
+        self.graph._IdGuard(self.nid)
         ids = self.graph.storage.Children(self.nid)
         return list(ids)
 
     def Parents(self):
+        self.graph._IdGuard(self.nid)
         ids = self.graph.storage.Parents(self.nid)
         return [ self.graph[nid] for nid in ids ]
 
     def ParentIds(self):
+        self.graph._IdGuard(self.nid)
         ids = self.graph.storage.Parents(self.nid)
         return list(ids)
 
