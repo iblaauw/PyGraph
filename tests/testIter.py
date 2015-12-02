@@ -45,6 +45,24 @@ class _ShareTestBase(TestCase):
         i = self.it(graph[0])
         self.assert_result(i, [ 0, 1, 2, 3 ])
 
+    def test_loop(self):
+        graph = Graph(5, True)
+        graph.SetWeight(0, 1, 1)
+        graph.SetWeight(1, 2, 1)
+        graph.SetWeight(2, 0, 1)
+
+        i = self.it(graph[0])
+        self.assert_result(i, [ 0, 1, 2 ])
+
+    def test_no_parents(self):
+        graph = Graph(5, True)
+        graph.SetWeight(0, 1, 1)
+        graph.SetWeight(2, 1, 1)
+        graph.SetWeight(3, 1, 1)
+
+        i = self.it(graph[1])
+        self.assert_result(i, [ 1 ])
+
 
 class BfsTest(_ShareTestBase):
     def getIt(self):
@@ -52,10 +70,21 @@ class BfsTest(_ShareTestBase):
 
     def test_simple(self):
         graph = Graph(5, True)
-        graph.SetWeight(1,2,3)
+        graph.SetWeight(1,2,1)
+        graph.SetWeight(1,3,1)
+        graph.SetWeight(2,4,1)
 
         val = bfsiter(graph[1])
-        self.assert_result(val, [ 1, 2 ])
+        self.assert_result(val, [ 1, 2, 3, 4 ])
+
+    def test_child_order(self):
+        graph = Graph(5, True)
+        graph.SetWeight(1,2,1)
+        graph.SetWeight(1,3,1)
+        graph.SetWeight(1,4,1)
+
+        val = bfsiter(graph[1])
+        self.assert_result(val, [ 1, 2, 3, 4 ])
 
 
 class DfsTest(_ShareTestBase):
@@ -64,11 +93,21 @@ class DfsTest(_ShareTestBase):
 
     def test_simple(self):
         graph = Graph(5, True)
-        graph.SetWeight(1,2,3)
+        graph.SetWeight(1,2,1)
+        graph.SetWeight(1,3,1)
+        graph.SetWeight(3,4,1)
 
         val = dfsiter(graph[1])
-        self.assert_result(val, [ 1, 2 ])
+        self.assert_result(val, [ 1, 3, 4, 2 ])
 
+    def test_child_order(self):
+        graph = Graph(5, True)
+        graph.SetWeight(1,2,1)
+        graph.SetWeight(1,3,1)
+        graph.SetWeight(1,4,1)
+
+        val = dfsiter(graph[1])
+        self.assert_result(val, [ 1, 4, 3, 2 ])
 
 
 test_classes = (BfsTest, DfsTest)
@@ -79,3 +118,4 @@ def load_tests(loader, standard_tests, unused):
         tests = loader.loadTestsFromTestCase(c)
         suite.addTest(tests)
     return suite
+

@@ -11,12 +11,16 @@ def dfsiter(startNode):
 def _generaliter(startNode, isbfs):
     if not isinstance(startNode, _Node):
         raise TypeError("bfsiter must be given a starting node.")
+    getfunc = deque.popleft if isbfs else deque.pop
+    return _doiter(startNode, getfunc)
+
+def _doiter(startNode, getfunc):
+    if not isinstance(startNode, _Node):
+        raise TypeError("bfsiter must be given a starting node.")
 
     visited = set()
     frontier = deque()
     frontier.append(startNode)
-
-    getfunc = deque.popleft if isbfs else deque.pop
 
     while True:
         if len(frontier) <= 0:
