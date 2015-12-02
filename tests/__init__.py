@@ -1,1 +1,1 @@
-from run import runAll
+from run import *

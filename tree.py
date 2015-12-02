@@ -16,7 +16,7 @@ class  TreeNodeInterface(object):
     def GetRoot(self): raise NotImplementedError()
 
     @abstractmethod
-    def GetParent(self): raise NotImplementedError()
+    def Parent(self): raise NotImplementedError()
 
     @abstractmethod
     def GetChild(self, index): raise NotImplementedError()
@@ -75,12 +75,12 @@ class TreeNode(TreeNodeInterface):
     def IsLeaf(self):
         return len(self._GraphNode().Children()) == 0
 
-    def GetRoot(self): raise NotImplementedError()
+    def GetRoot(self):
         if self.IsRoot():
             return self
         return self._CreateNode(self._bundle.rootid)
 
-    def GetParent(self):
+    def Parent(self):
         parents = self._GraphNode().Parents()
 
         if len(parents) == 0:
