@@ -1,8 +1,7 @@
 import unittest
-from . import testStorage
-from . import testGraph
+from . import testStorage, testGraph, testIter
 
-_allModules = (testStorage, testGraph)
+_allModules = (testStorage, testGraph, testIter)
 
 def runAll():
     for mod in _allModules:
